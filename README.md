@@ -157,9 +157,6 @@ Agent collaboration, tool usage, and task routing are all handled automatically 
 
 - [crewAI Documentation](https://docs.crewai.com)
 - [crewAI GitHub](https://github.com/joaomdmoura/crewai)
-- [Join the Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with the Docs](https://chatg.pt/DWjSBZn)
-
 ---
 
 ## License
