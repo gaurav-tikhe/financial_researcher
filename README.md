@@ -1,54 +1,167 @@
-# FinancialResearcher Crew
+# 💹 Financial Researcher
 
-Welcome to the FinancialResearcher Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+A multi-agent AI system for financial research, built with [crewAI](https://crewai.com). A crew of specialized AI agents collaborates to research financial topics and produce structured reports — automatically.
+
+---
+
+## Overview
+
+**Financial Researcher** uses the crewAI framework to orchestrate a team of AI agents that work together on complex financial research tasks. Each agent has a defined role, goal, and set of tools. They execute tasks sequentially, with the output of one feeding into the next, culminating in a polished research report saved to the `output/` directory.
+
+---
+
+## Project Structure
+
+```
+financial_researcher/
+├── src/financial_researcher/
+│   ├── config/
+│   │   ├── agents.yaml        # Agent definitions (role, goal, backstory)
+│   │   └── tasks.yaml         # Task definitions (description, expected output)
+│   ├── tools/                 # Custom tool implementations
+│   ├── crew.py                # Crew orchestration logic
+│   └── main.py                # Entry point and input configuration
+├── knowledge/                 # Domain knowledge sources for agents
+├── output/                    # Generated research reports
+├── AGENTS.md                  # CrewAI reference for AI coding assistants
+├── pyproject.toml
+└── uv.lock
+```
+
+---
+
+## Prerequisites
+
+- Python `>=3.10, <3.14`
+- [uv](https://docs.astral.sh/uv/) for dependency management
+- An OpenAI API key
+
+---
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
-
-First, if you haven't already, install uv:
+**1. Install `uv` (if not already installed):**
 
 ```bash
 pip install uv
 ```
 
-Next, navigate to your project directory and install the dependencies:
+**2. Install the CrewAI CLI:**
 
-(Optional) Lock the dependencies and install them by using the CLI command:
+```bash
+uv tool install crewai
+```
+
+**3. Clone the repository:**
+
+```bash
+git clone https://github.com/gaurav-tikhe/financial_researcher.git
+cd financial_researcher
+```
+
+**4. Install project dependencies:**
+
 ```bash
 crewai install
 ```
-### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**5. Set up your environment variables:**
 
-- Modify `src/financial_researcher/config/agents.yaml` to define your agents
-- Modify `src/financial_researcher/config/tasks.yaml` to define your tasks
-- Modify `src/financial_researcher/crew.py` to add your own logic, tools and specific args
-- Modify `src/financial_researcher/main.py` to add custom inputs for your agents and tasks
+Create a `.env` file in the project root:
+
+```env
+OPENAI_API_KEY=sk-your-key-here
+```
+
+---
 
 ## Running the Project
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+To kick off the research crew:
 
 ```bash
-$ crewai run
+crewai run
 ```
 
-This command initializes the financial_researcher Crew, assembling the agents and assigning them tasks as defined in your configuration.
+This initializes all agents, assigns tasks as configured in `config/tasks.yaml`, and runs the pipeline. By default, it produces a `report.md` file in the `output/` directory.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+You can also use the project scripts directly:
 
-## Understanding Your Crew
+```bash
+# Run the crew
+financial_researcher
 
-The financial_researcher Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+# Train the crew
+train
 
-## Support
+# Test the crew
+test
 
-For support, questions, or feedback regarding the FinancialResearcher Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+# Replay from a specific task
+replay
+```
 
-Let's create wonders together with the power and simplicity of crewAI.
+---
+
+## Customization
+
+Tailor the crew to your research needs:
+
+- **`src/financial_researcher/config/agents.yaml`** — Define agent roles, goals, and backstories. Variables like `{topic}` are interpolated at runtime.
+- **`src/financial_researcher/config/tasks.yaml`** — Define task descriptions, expected outputs, assigned agents, and output files.
+- **`src/financial_researcher/crew.py`** — Add custom logic, tools, and agent/task wiring.
+- **`src/financial_researcher/main.py`** — Set the input variables passed to the crew (e.g., `topic`).
+
+### Example: Changing the Research Topic
+
+In `main.py`, update the inputs:
+
+```python
+inputs = {"topic": "Federal Reserve interest rate policy"}
+FinancialResearcherCrew().crew().kickoff(inputs=inputs)
+```
+
+### Example: Swapping the LLM
+
+In `agents.yaml` or `crew.py`:
+
+```yaml
+researcher:
+  llm: anthropic/claude-sonnet-4-20250514
+```
+
+---
+
+## How It Works
+
+The crew follows a **sequential process**:
+
+1. A **Researcher** agent gathers and synthesizes the latest information on the given financial topic.
+2. Additional agents (e.g., analyst, writer) process and transform that output.
+3. The final agent produces a structured Markdown report saved to `output/`.
+
+Agent collaboration, tool usage, and task routing are all handled automatically by crewAI.
+
+---
+
+## Dependencies
+
+| Package | Version |
+|---|---|
+| `crewai[tools]` | `1.14.4` |
+| `litellm` | `<=1.83.6` |
+
+---
+
+## Resources
+
+- [crewAI Documentation](https://docs.crewai.com)
+- [crewAI GitHub](https://github.com/joaomdmoura/crewai)
+- [Join the Discord](https://discord.com/invite/X4JWnZnxPb)
+- [Chat with the Docs](https://chatg.pt/DWjSBZn)
+
+---
+
+## License
+
+This project is open source. Contributions and forks are welcome.
